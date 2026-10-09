@@ -1687,7 +1687,7 @@ function makeMockDevice(opt = {}) {
     E("MIDI", ["USB", "TRS"], 0), E("SYNC", NDASH, 0), E("ROUT", ["CH1-4", "SEL", "CH5-8", "CH9-12", "CH13-16"], 0), D("CPU", F.INT, 0, 0, 0),
     D("SLOT", F.INT, 1, 4, 1), E("NAME", NDASH, 0), E("LOAD", NGO, 0), E("SAVE", NGO, 0),
     E("ENG", ["ANALOG", "-", "PHASE", "LOFI", "SAMPLE", "VOICE", "TRIO", "WHEEL",
-      "GRAIN", "PHYS", "DRUM", "NOISE", "FM6", "SLICE"], 0), E("SET", NGO, 0),
+      "GRAIN", "PHYS", "DRUM", "NOISE", "FM6", "SLICE", "WAVE"], 0), E("SET", NGO, 0),
     E("CLRSQ", NGO, 0), E("INIT", NGO, 0),
     E("TYPE", ["ROOM", "SPRING", "HALL"], 2),       /* G_RTYPE (id 24, was G_DRCH): the reverb's model (HALL: 1.2) */
     D("-", F.INT, 0, 0, 0), D("-", F.INT, 0, 0, 0),   /* G_DRLVL, G_DRREV: inert since 1.0 */
@@ -1772,6 +1772,16 @@ function makeMockDevice(opt = {}) {
         E("DIV", ["4", "8", "16", "32", "AUTO", "MAN"], 2), D("START", F.INT, 0, 31, 0), D("PTCH", F.SEMI, -24, 24, 0),
         E("MODE", ["ONE", "GATE", "LOOP"], 0), E("REV", ["OFF", "ON"], 0), D("DCAY", F.TIME, 0, 127, 127), D("TONE", F.INT, 0, 127, 127)],
       presets: [P("CHOP", [0, 2, 0, 0, 0, 0, 127, 127], [0, 127, 127, 30], 0, 9), P("STUTTER", [0, 1, 0, 0, 1, 0, 90, 110], [0, 127, 127, 12], 0, 10)] },
+    /* 14: WAVE (Marcel-B/Felucca's wavetable engine, src/eng_wave.c) */
+    { name: "WAVE", titles: ["OSC", "FLT"], edit: [E("TBL", ["BASIC", "PWM", "SYNC", "VOX", "ORGAN", "FM", "HARM", "DIGI"], 0),
+        D("POS", F.INT, 0, 127, 0), D("DTN", F.INT, 0, 127, 10, null, "ct"), D("OFS", F.INT, 0, 127, 0),
+        D("CUT", F.CUTOFF, 0, 127, 100), D("RES", F.PCT, 0, 127, 20), D("MIX", F.PCT, 0, 127, 64), D("KTR", F.PCT, 0, 127, 64)],
+      presets: [P("WOBBLE", [0, 96, 8, 0, 40, 70, 40, 64], [0, 80, 110, 20], 1, 14), P("GROWL", [5, 50, 0, 10, 62, 50, 60, 64], [0, 80, 115, 25], 1, 14),
+        P("YOI BASS", [3, 64, 6, 18, 80, 40, 50, 64], [0, 80, 115, 25], 1, 14), P("RIDDIM", [7, 30, 0, 0, 70, 30, 0, 64], [0, 70, 110, 15], 1, 14),
+        P("REESE", [0, 76, 20, 0, 58, 25, 64, 64], [2, 80, 115, 40], 1, 8), P("SCREECH", [2, 20, 12, 30, 95, 75, 50, 64], [0, 90, 100, 30], 1, 4),
+        P("SUB WAVE", [0, 0, 0, 0, 60, 0, 0, 0], [0, 60, 110, 20], 1, 8), P("PPG PAD", [6, 40, 10, 12, 85, 15, 64, 32], [70, 90, 110, 95], 0, 5),
+        P("VOX PAD", [3, 0, 7, 30, 90, 10, 64, 32], [80, 90, 115, 95], 0, 5), P("DIGI BEL", [7, 0, 0, 40, 110, 10, 40, 64], [0, 85, 0, 70], 0, 7),
+        P("ORGAN", [4, 70, 4, 0, 110, 0, 40, 32], [2, 70, 120, 30], 0, 6), P("PWM LEAD", [1, 20, 10, 25, 90, 25, 50, 64], [5, 70, 100, 50], 1, 4)] },
   ];
   const FM6_E = ENG.findIndex((e) => e.name === "FM6"), FM6_OWN = FM6.FACTORY_PK.length, DRUM_E = ENG.findIndex((e) => e.name === "DRUM");
   /* factory PATTERNS[] (engines.c; the device loads them from SAVE > PHRASES, presets only suggest one): absolute
@@ -1791,6 +1801,7 @@ function makeMockDevice(opt = {}) {
     [[60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75], [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]],
     [[36, 42, 42, 42, 38, 42, 36, 42, 36, 42, 42, 36, 38, 42, 46, 42], [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]],   /* 12 BEAT (DRUM) */
     [[48, 51, 55, 60, 63, 67, 72, 75, 48, 51, 55, 60, 63, 67, 72, 75], [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]],   /* 13 ARP */
+    [[41, 0, 0, 0, 0, 0, 41, 0, 44, 0, 0, 41, 0, 0, 39, 0], [1, T_, T_, T_, 0, 0, 1, T_, 2, T_, 0, 1, T_, T_, 2, T_]],   /* 14 WOBBLE (WAVE) */
   ];
   for (let op = 0; op < 4; op++) TP.push(D("ATK", F.TIME, 0, 127, 0), D("DEC", F.TIME, 0, 127, 0), D("SUS", F.PCT, 0, 127, 127), D("REL", F.TIME, 0, 127, 0), D("LVL", F.PCT, 0, 127, 127));
   TP.push(E("CHRD", ["OFF", "DIA3", "DIA7", "MAJ", "MIN", "DOM7", "MAJ7", "MIN7", "SUS4", "POW"], 0),   /* the chord keys 81, 82 */
@@ -2423,7 +2434,7 @@ function enumShown(d) {
 /* the order the device shows its engines in (src/engines.c ENGINE_ORDER): the lists here follow it, the protocol keeps
    the engine numbers. engineOrder(names): the indices of names in that order, "-" (a reserved number) left out; a name
    the list does not know (another firmware) follows in index order */
-const ENGINE_ORDER = ["ANALOG", "FM6", "DIGITAL", "PHASE", "LOFI", "SAMPLE", "VOICE", "TRIO", "WHEEL", "GRAIN", "PHYS", "NOISE",
+const ENGINE_ORDER = ["ANALOG", "FM6", "DIGITAL", "WAVE", "PHASE", "LOFI", "SAMPLE", "VOICE", "TRIO", "WHEEL", "GRAIN", "PHYS", "NOISE",
   "SLICE", "DRUM"];
 function engineOrder(names) {
   const rank = (n) => { const k = ENGINE_ORDER.indexOf(n); return k < 0 ? ENGINE_ORDER.length : k; };

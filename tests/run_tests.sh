@@ -77,6 +77,11 @@
 #                   responses around the cutoff, RES, bounded at the corners), ENV SYNC (OFF bit for bit, the note values
 #                   on the knob, attack / decay / release times at 60 / 120 / 173 BPM and on the external clock), the cost;
 #                   demos in build/sound15_demo/ (analog_bp, analog_hp, env_sync).
+# WAVE (tests/wave_test.c; Marcel-B/Felucca's engine 14, src/eng_wave.c): the tables (no DC, peaks, bands), BASIC's sine
+#                   and square, the pitch of both oscillators, OFS, the aliasing over the keyboard, ENV / LFO DEST SHP on
+#                   POS, POS gliding over a block, every preset (bounded, audible, released, its modulation), engine 14's
+#                   favourites beside MIDI LEARN's bytes, the cost against ANALOG; demos in build/wave_demo/ (every preset
+#                   playing its phrase, tables_pos_sweep).
 # PERFORM (tests/perform_test.c): the FX hold layer (src/perform.c): 1/16 starts, stereo buffer effects, the
 #                   too-long REPEAT, the SLICER interplay, silent layer keys, idle bit-identical, cost; build/perform_demo/;
 #                   OCT UP / DN (the harmonizer): pitch, stereo, clicks, the shimmer bounded, cost; FLANGER / PHASER (1.2): no DC,
@@ -289,6 +294,10 @@ if [ -f build/gen/felucca_tables.h ]; then
     mkdir -p build/sound15_demo
     run "1.5 sound items: ANALOG filter TYPE LP / BP / HP (responses, LP and other engines bit for bit), ENV SYNC (times at several tempi), cost, demos" \
         "$OUT/sound15_test" build/sound15_demo
+    $CC -O2 -w -Ibuild/gen -Ifirmware/src -o "$OUT/wave_test" tests/wave_test.c -lm
+    mkdir -p build/wave_demo
+    run "WAVE (engine 14, this fork's): tables, sine / square, pitch, OFS, aliasing, SHP modulation, presets, favourites, cost, demos" \
+        "$OUT/wave_test" build/wave_demo
     $CC -O2 -w -Ibuild/gen -Ifirmware/src -o "$OUT/slicer_test" tests/slicer_test.c -lm
     mkdir -p build/slicer_demo
     run "SLICER: no clicks, timing, sync with the sequencer, STUT, cost, demos" "$OUT/slicer_test" build/slicer_demo

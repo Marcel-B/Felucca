@@ -25,6 +25,25 @@ Multi-engine synthesizer firmware for the M-VAVE FM-1. Please report what you fi
 
 <a href="https://hugelton.itch.io/felucca"><img src="https://static.itch.io/images/badge-color.svg" alt="Available on itch.io" width="74"></a>
 
+## This fork: the WAVE engine
+
+[Marcel-B/Felucca](https://github.com/Marcel-B/Felucca) adds a fourteenth engine to Felucca 1.5, **WAVE**
+(engine 14, `firmware/src/eng_wave.c`), listed after FM6. Everything else is upstream's.
+
+- Two wavetable oscillators and ANALOG's filter. A table holds 8 single-cycle frames; **POS** moves through them,
+  crossfading between neighbours. **TBL** picks one of eight tables generated from formulas
+  (`tools/gen_wavetables.py`, no third-party wavetables): BASIC (sine, triangle, saw, square), PWM, SYNC (a hard-sync
+  sweep), VOX (vowels A E I O U), ORGAN (drawbar registrations), FM (2-operator, rising index), HARM (more and more
+  harmonics), DIGI (stepped, 1-bit). Each is stored band-limited per octave band (59 KB of flash).
+- EDIT 1: TBL POS DTN (OSC 2 in cents) OFS (OSC 2 reads at POS + OFS). EDIT 2: CUT RES MIX (OSC 2's share) KTR;
+  EDIT > FILTER adds the filter TYPE (LP, BP, HP) as on ANALOG. HOME: POS, CUT, ATK, REL.
+- ENV DEST SHP, LFO DEST SHP and the matrix's SHP move POS: a synced LFO on SHP is a wobble.
+- 12 presets: WOBBLE, GROWL, YOI BASS, RIDDIM (dubstep basses with a synced LFO on POS and an INSERT, best with the
+  new WOBBLE phrase at 140 BPM), REESE, SCREECH, SUB WAVE, PPG PAD, VOX PAD, DIGI BEL, ORGAN, PWM LEAD. A WAVE preset
+  also sets its LFO, its SHP / FLT depths and the INSERT.
+- Engine numbers are stored in projects and user presets. Should the original Felucca ever add its own engine 14,
+  projects with a WAVE track would not open the same on both.
+
 ## Features
 
 - **Thirteen engines** (below), each with its own factory presets; every factory sound has a category (BASS, LEAD,
@@ -289,6 +308,7 @@ In the order the device lists them:
   web editor (which imports .syx files) or on the device: EDIT > OPERATOR (ratio or fixed frequency, fine, level),
   OP ENV (each stage's rate and level, drawn as the envelope) and OPERATOR 2 (mode, detune, velocity), one
   operator at a time on the algorithm chart; macros on top; SLOT picks a factory patch (F1–F8), the track's own (OWN) or a voice of the bank the web editor sent (B1–B32)
+- **WAVE** (this fork's): two wavetable oscillators morphing through 8 frames of 8 generated tables, ANALOG's filter
 - **PHASE**: phase distortion (ported from CrispyZebra)
 - **LOFI**: chiptune; pulse, triangle, saw, noise and a 4-bit wave RAM, stepped envelope, sweep, arpeggio
 - **SAMPLE**: multisampled instruments (PIANO, FLUTE, SAX) and 3 user sample slots
