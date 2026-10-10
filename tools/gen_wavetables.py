@@ -12,7 +12,9 @@ highest harmonic stays below 19.5 kHz over the band (WT_INC_MAX), in a power-of-
 highest harmonic + 1, four times up to 15 harmonics, eight times up to 7. Linear interpolation's images are harmonics
 too (harmonic h's at length - h, about (h / (length - h))^2 as loud), above the band's top one; the high bands, whose
 harmonics are few and strong, get the longer cycles so the images that fold back past 22 kHz stay small
-(tests/wave_test.c measures it).
+(tests/wave_test.c measures it). Linear interpolation also plays harmonic h only sinc^2(h / length) as loud (-8 dB
+at half the length, the top octave of the 2x bands): emph() makes the tables that much louder there, at most 1.7x,
+so the highs come out near the formula's instead of dull.
 A band whose content equals the next smaller one's (a table without high harmonics: ORGAN, VOX, FM) shares it.
 One scale per frame (the peak over all its bands) keeps the level the same across the bands. No DC.
 
@@ -214,13 +216,23 @@ TABLES = [t_basic, t_pwm, t_sync, t_vox, t_organ, t_fm, t_harm, t_digi]
 
 # ---------------------------------------------------------------- synthesis
 
+EMPH_MAX = 1.7                    # the most emph() lifts a harmonic (+4.6 dB): more lifts the images too
+
+
+def emph(h, n):
+    """linear interpolation between n samples plays harmonic h sinc^2(h / n) as loud; the table is made that much
+    louder there (up to EMPH_MAX) so the engine's highs come out as the formula's"""
+    x = math.pi * h / n
+    return min(EMPH_MAX, (x / math.sin(x)) ** 2)
+
+
 def synth(c, n, hmax):
     out = []
     for i in range(n):
         x = 0.0
         for h in range(1, hmax + 1):
             if c[h]:
-                x += 2 * (c[h] * cmath.exp(2j * math.pi * h * i / n)).real
+                x += 2 * (c[h] * emph(h, n) * cmath.exp(2j * math.pi * h * i / n)).real
         out.append(x)
     return out
 

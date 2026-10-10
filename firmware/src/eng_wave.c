@@ -95,18 +95,18 @@ static void wave_render(track_t *t, voice_t *v, int32_t *out, uint32_t n, const 
 /* {TBL, POS, DTN, OFS, CUT, RES, MIX, KTR}, {ATK DEC SUS REL}, ENV -> FILTER, mono; the sends; a pattern. The
  * dubstep basses want a phrase with long notes (PATTERNS 14 WOBBLE) and a tempo near 140 */
 static const preset_t WAVE_PRESETS[] = {
-    {"WOBBLE", {0, 96, 8, 0, 40, 70, 40, 64}, {0, 80, 110, 20}, 0, 1, FX(25, 0, 0, 10), PAT(14)},
-    {"GROWL", {5, 50, 0, 10, 62, 50, 60, 64}, {0, 80, 115, 25}, 10, 1, FX(35, 0, 0, 10), PAT(14)},
-    {"YOI BASS", {3, 64, 6, 18, 80, 40, 50, 64}, {0, 80, 115, 25}, 0, 1, FX(20, 0, 0, 15), PAT(14)},
-    {"RIDDIM", {7, 30, 0, 0, 70, 30, 0, 64}, {0, 70, 110, 15}, 0, 1, FX(30, 0, 0, 5), PAT(14)},
-    {"REESE", {0, 76, 20, 0, 58, 25, 64, 64}, {2, 80, 115, 40}, 0, 1, FX(10, 30, 0, 20), PAT(8)},
-    {"SCREECH", {2, 20, 12, 30, 95, 75, 50, 64}, {0, 90, 100, 30}, 15, 1, FX(30, 0, 30, 25), PAT(4)},
+    {"WOBBLE", {0, 96, 8, 0, 52, 70, 40, 64}, {0, 80, 110, 20}, 0, 1, FX(25, 0, 0, 10), PAT(14)},
+    {"GROWL", {5, 50, 0, 10, 78, 50, 60, 64}, {0, 80, 115, 25}, 10, 1, FX(35, 0, 0, 10), PAT(14)},
+    {"YOI BASS", {3, 64, 6, 18, 92, 40, 50, 64}, {0, 80, 115, 25}, 0, 1, FX(20, 0, 0, 15), PAT(14)},
+    {"RIDDIM", {7, 30, 0, 0, 88, 30, 0, 64}, {0, 70, 110, 15}, 0, 1, FX(30, 0, 0, 5), PAT(14)},
+    {"REESE", {0, 76, 20, 0, 96, 20, 64, 48}, {2, 80, 115, 40}, 0, 1, FX(10, 30, 0, 20), PAT(8)},
+    {"SCREECH", {2, 20, 12, 30, 108, 75, 50, 64}, {0, 90, 100, 30}, 15, 1, FX(30, 0, 30, 25), PAT(4)},
     {"SUB WAVE", {0, 0, 0, 0, 60, 0, 0, 0}, {0, 60, 110, 20}, 0, 1, FX(0, 0, 0, 0), PAT(8)},
-    {"PPG PAD", {6, 40, 10, 12, 85, 15, 64, 32}, {70, 90, 110, 95}, 5, 0, FX(0, 60, 25, 75), PAT(5)},
-    {"VOX PAD", {3, 0, 7, 30, 90, 10, 64, 32}, {80, 90, 115, 95}, 0, 0, FX(0, 50, 20, 80), PAT(5)},
-    {"DIGI BEL", {7, 0, 0, 40, 110, 10, 40, 64}, {0, 85, 0, 70}, 0, 0, FX(0, 20, 40, 45), PAT(7)},
-    {"ORGAN", {4, 70, 4, 0, 110, 0, 40, 32}, {2, 70, 120, 30}, 0, 0, FX(0, 40, 10, 30), PAT(6)},
-    {"PWM LEAD", {1, 20, 10, 25, 90, 25, 50, 64}, {5, 70, 100, 50}, 15, 1, FX(10, 20, 40, 30), PAT(4)},
+    {"PPG PAD", {6, 40, 10, 12, 96, 15, 64, 32}, {70, 90, 110, 95}, 5, 0, FX(0, 60, 25, 75), PAT(5)},
+    {"VOX PAD", {3, 0, 7, 30, 100, 10, 64, 32}, {80, 90, 115, 95}, 0, 0, FX(0, 50, 20, 80), PAT(5)},
+    {"DIGI BEL", {7, 0, 0, 40, 118, 10, 40, 64}, {0, 85, 0, 70}, 0, 0, FX(0, 20, 40, 45), PAT(7)},
+    {"ORGAN", {4, 70, 4, 0, 116, 0, 40, 32}, {2, 70, 120, 30}, 0, 0, FX(0, 40, 10, 30), PAT(6)},
+    {"PWM LEAD", {1, 20, 10, 25, 102, 25, 50, 64}, {5, 70, 100, 50}, 15, 1, FX(10, 20, 40, 30), PAT(4)},
 };
 
 /* the rest of a preset: track parameters it sets beyond preset_t (id, value; 0 ends). LFO SYNC 6 = 1/8, 8 = 1/16,
@@ -114,16 +114,16 @@ static const preset_t WAVE_PRESETS[] = {
  * 0 dB, two steps a dB; the basses come out near -16 dBFS rms, as loud as ANALOG's SQR BASS) */
 typedef struct { uint8_t id; int8_t v; } wave_set_t;
 static const wave_set_t WAVE_MOD[NELEM(WAVE_PRESETS)][10] = {
-    {{P_LSYNC, 6}, {P_LWAVE, 0}, {P_LD_SHP, 30}, {P_LD_FLT, 50}, {P_ITYPE, 4}, {P_IA, 60}, {P_IB, 80},
+    {{P_LSYNC, 6}, {P_LWAVE, 0}, {P_LD_SHP, 30}, {P_LD_FLT, 50}, {P_ITYPE, 4}, {P_IA, 60}, {P_IB, 100},
      {P_IC, 108}},                                                         /* WOBBLE: 1/8, filter and frames */
-    {{P_LSYNC, 8}, {P_LWAVE, 1}, {P_LD_SHP, 40}, {P_LD_FLT, 25}, {P_ITYPE, 3}, {P_IA, 70}, {P_IB, 90},
+    {{P_LSYNC, 8}, {P_LWAVE, 1}, {P_LD_SHP, 40}, {P_LD_FLT, 25}, {P_ITYPE, 3}, {P_IA, 70}, {P_IB, 108},
      {P_IC, 104}},                                                         /* GROWL: 1/16, the FM index, folded */
-    {{P_LSYNC, 5}, {P_LWAVE, 1}, {P_LD_SHP, 63}, {P_ITYPE, 1}, {P_IA, 80}, {P_IB, 90}, {P_IC, 100}},
+    {{P_LSYNC, 5}, {P_LWAVE, 1}, {P_LD_SHP, 63}, {P_ITYPE, 1}, {P_IA, 80}, {P_IB, 104}, {P_IC, 100}},
                                                                            /* YOI BASS: 1/4 through the vowels */
-    {{P_LSYNC, 8}, {P_LWAVE, 3}, {P_LPOL, 1}, {P_LD_SHP, 50}, {P_ITYPE, 2}, {P_IA, 70}, {P_IB, 70}, {P_IC, 98}},
+    {{P_LSYNC, 8}, {P_LWAVE, 3}, {P_LPOL, 1}, {P_LD_SHP, 50}, {P_ITYPE, 2}, {P_IA, 70}, {P_IB, 96}, {P_IC, 98}},
                                                                            /* RIDDIM: square steps of DIGI, 1/16 */
-    {{P_LRATE, 20}, {P_LD_SHP, 6}, {P_ITYPE, 1}, {P_IA, 50}, {P_IB, 80}, {P_IC, 100}},   /* REESE: a slow drift */
-    {{P_ED_SHP, 40}, {P_LRATE, 92}, {P_LD_SHP, 12}, {P_GLIDE, 30}, {P_ITYPE, 2}, {P_IA, 60}, {P_IB, 100},
+    {{P_LRATE, 20}, {P_LD_SHP, 6}, {P_ITYPE, 1}, {P_IA, 50}, {P_IB, 104}, {P_IC, 100}},   /* REESE: a slow drift */
+    {{P_ED_SHP, 40}, {P_LRATE, 92}, {P_LD_SHP, 12}, {P_GLIDE, 30}, {P_ITYPE, 2}, {P_IA, 60}, {P_IB, 112},
      {P_IC, 98}},                                                          /* SCREECH: the sync sweeps up, fast */
     {{0, 0}},                                                              /* SUB WAVE */
     {{P_LRATE, 30}, {P_LWAVE, 1}, {P_LD_SHP, 20}, {P_ED_SHP, 20}},          /* PPG PAD: through the harmonics */
