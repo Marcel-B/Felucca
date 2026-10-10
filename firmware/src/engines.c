@@ -40,6 +40,7 @@ static uint8_t eng_mem_owner[NPART];       /* engine index + 1 whose state is in
 #if FELUCCA_SLICE
 #include "eng_slice.c"
 #endif
+#include "eng_wave.c"           /* WAVE: wavetables (this fork's, engine 14) */
 
 /* the editor protocol, user presets and projects store these indices: append, never reorder */
 static const engine_t *const ENGINES[NENGINES] = {
@@ -63,6 +64,8 @@ static const engine_t *const ENGINES[NENGINES] = {
 #if FELUCCA_SLICE
     &ENG_SLICE,                  /* 13 (FELUCCA_SLICE=0 builds without it) */
 #endif
+    &ENG_WAVE,                   /* 14 (ENGI_WAVE): this fork's. Should the original Felucca add an engine 14, its
+                                  * projects and this one's would not agree on it */
 };
 
 /* a track's engine number as an index (the audio paths: a compare, cheaper than % NENGINES; a bad number: 0) */
@@ -117,6 +120,7 @@ static const uint8_t ENGINE_ORDER[NENG_SHOWN] = {
 #if FELUCCA_FM4
     1,                           /* DIGITAL */
 #endif
+    14,                          /* WAVE (this fork's) */
     2, 3, 4, 5, 6, 7, 8, 9,      /* PHASE LOFI SAMPLE VOICE TRIO WHEEL GRAIN PHYS */
     11,                          /* NOISE */
 #if FELUCCA_SLICE
@@ -182,6 +186,9 @@ static const struct {
      * now that the arpeggiator is the track's and a preset no longer switches it on */
     {"ARP", {48, 51, 55, 60, 63, 67, 72, 75, 48, 51, 55, 60, 63, 67, 72, 75},       /* 13 */
      {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0}},
+    /* half-time bass in F for the WAVE engine's dubstep presets (eng_wave.c): long notes, so its synced LFO wobbles */
+    {"WOBBLE", {41, 0, 0, 0, 0, 0, 41, 0, 44, 0, 0, 41, 0, 0, 39, 0},              /* 14 */
+     {1, T_, T_, T_, 0, 0, 1, T_, 2, T_, 0, 1, T_, T_, 2, T_}},
 };
 #undef T_
 #define NPATTERNS (sizeof PATTERNS / sizeof PATTERNS[0])

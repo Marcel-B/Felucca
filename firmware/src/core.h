@@ -20,7 +20,10 @@
 #define FELUCCA_FM4 0            /* the DIGITAL engine (eng_digital.c, four-operator FM): kept in the tree, not built
                                   * by default; replaced by FM6, its sounds convert (fm4_convert.c) */
 #endif
-#define NENGINES (13 + FELUCCA_SLICE)   /* SLICE (13) comes last: the other engines keep their numbers */
+#if !FELUCCA_SLICE
+#error "WAVE is engine 14 (eng_wave.c): FELUCCA_SLICE=0 would give it SLICE's number 13"
+#endif
+#define NENGINES (14 + FELUCCA_SLICE)   /* SLICE is 13, WAVE (this fork's, eng_wave.c) 14: the others keep their numbers */
 #define ENGI_DIGITAL 1u          /* reserved without FELUCCA_FM4: never selectable (eng_ok), its sounds load as FM6 */
 #define NENG_SHOWN (NENGINES - !FELUCCA_FM4)   /* the engines one can pick: PRESETS, the EDIT layer, the editor,
                                                 * in the display order of engines.c ENGINE_ORDER */
